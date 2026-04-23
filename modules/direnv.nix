@@ -66,7 +66,7 @@
   # shell configuration for nushell, uses home managers config since
   # direnv doesnt have a command to generate
   mutations."/nushell".shellInit =
-    { inputs, options }:
+    { options, inputs }:
     let
       inherit (inputs.nixpkgs.lib) getExe;
       finalWrapper = options {};

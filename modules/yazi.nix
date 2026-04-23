@@ -153,7 +153,7 @@
   };
 
   impl =
-    { inputs, options }:
+    { options, inputs }:
     let
       inherit (inputs.nixpkgs) pkgs;
       inherit (inputs.nixpkgs.lib) makeBinPath;

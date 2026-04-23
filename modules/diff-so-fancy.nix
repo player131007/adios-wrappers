@@ -15,7 +15,7 @@
   };
 
   impl =
-    { inputs, options }:
+    { options, inputs }:
     let
       gitWrapper = inputs.git {};
     in

@@ -100,7 +100,7 @@ overrides = {
   git = {
     inputs.less.path = "/less";
     options.settings.defaultFunc =
-      { inputs, options }:
+      { options, inputs }:
       {
         core.pager = inputs.nixpkgs.lib.getExe (options { });
       };

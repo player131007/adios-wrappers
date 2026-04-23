@@ -30,7 +30,7 @@
   };
 
   mutations."/fish".interactiveShellInit =
-    { inputs, options }:
+    { options, inputs }:
     let
       inherit (inputs.nixpkgs.lib) getExe;
       inherit (builtins) concatStringsSep;

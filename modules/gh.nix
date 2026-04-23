@@ -44,7 +44,7 @@
 
   mutations = {
     "/git".settings =
-      { inputs, options }:
+      { options, inputs }:
       let
         inherit (inputs.nixpkgs.lib) getExe;
         finalWrapper = options {};

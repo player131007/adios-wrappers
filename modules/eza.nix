@@ -43,7 +43,7 @@
   };
 
   impl =
-    { inputs, options }:
+    { options, inputs }:
     let
       inherit (inputs.nixpkgs.pkgs) writeText;
       inherit (inputs.nixpkgs.lib.generators) toJSON;

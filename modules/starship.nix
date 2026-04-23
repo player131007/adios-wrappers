@@ -40,7 +40,7 @@
       mutators = []; # Hack to make the mergeFunc be called with no mutators
       mutatorType = types.attrs;
       mergeFunc =
-        { mutators, inputs, options }:
+        { mutators, options, inputs }:
         let
           inherit (inputs.nixpkgs.lib) recursiveUpdate;
           inherit (adios.lib) merge;
