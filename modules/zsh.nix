@@ -209,7 +209,7 @@
               let
                 value = options.aliases.${name};
               in
-              if value ? global && value.global then
+              if (value.global or false) then
                 "alias -g ${name}='${value.command}'"
               else
                 "alias ${name}='${value.command or value}'"

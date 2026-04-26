@@ -97,7 +97,7 @@ in {
     { options, inputs }:
     let
       inherit (inputs.nixpkgs.pkgs) stdenvNoCC callPackage lndir;
-      inherit (builtins) attrNames concatMap concatStringsSep isAttrs;
+      inherit (builtins) attrNames concatMap concatStringsSep;
       makeBinaryWrapper = callPackage ./makeBinaryWrapper/package.nix {};
       environmentStr = concatStringsSep " " (
         concatMap (
@@ -107,7 +107,7 @@ in {
           in
           if value == null then
             []
-          else if isAttrs value && value ? readFromFile && value.readFromFile == true then
+          else if (value.readFromFile or false) then
             [ "--set-from-file ${var} \"${value.value}\"" ]
           else
             [ "--set ${var} \"${value}\"" ]
