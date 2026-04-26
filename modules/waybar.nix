@@ -99,6 +99,8 @@
       name = "waybar";
       inherit (options) package;
       flags = configFlag ++ styleFlag;
-      environment.GTK_DEBUG = if (options.interactiveEnv or false) then "interactive" else null;
+      environment = {
+        GTK_DEBUG = if (options.interactiveEnv or false) then "interactive" else null;
+      };
     };
 }
