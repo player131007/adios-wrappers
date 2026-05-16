@@ -132,7 +132,11 @@ in {
     stdenvNoCC.mkDerivation {
       name = "${options.name}-wrapped";
       buildInputs = [ makeBinaryWrapper ];
-      paths = map (path: "${path}") ([ options.package ] ++ options.extraPaths);
+      paths =
+        if options.extraPaths == [] then
+          [ "${options.package}" ]
+        else
+          map (path: "${path}") ([ options.package ] ++ options.extraPaths);
       meta.mainProgram = options.name;
       passthru = options.package.passthru or {};
 
