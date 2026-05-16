@@ -6,7 +6,6 @@ let
       types.null
       other
     ];
-  optionalString = x: if x != null then x else "";
 in {
   inputs = {
     nixpkgs.path = "/nixpkgs";
@@ -96,6 +95,7 @@ in {
   impl =
     let
       inherit (builtins) attrNames concatMap concatStringsSep;
+      optionalString = x: if x != null then x else "";
     in
     { options, inputs }:
     let
