@@ -96,17 +96,15 @@
           ]
         );
       mergeFunc =
-        { mutators, inputs }:
         let
           inherit (builtins) attrNames attrValues concatMap concatStringsSep isAttrs isString replaceStrings;
-
+          escapeQuotes = replaceStrings [ "'" ] [ "\\'" ];
           abbrToString =
             abbr: expansion: setCursor: command:
             "abbr --add "
             + (if setCursor then "--set-cursor " else "")
             + (if command != null then "--command ${command} " else "")
-            + "-- ${abbr} '${replaceStrings [ "'" ] [ "\\'" ] expansion}'";
-
+            + "-- ${abbr} '${escapeQuotes expansion}'";
           moduleToAbbrs =
             command: module:
             concatMap (
@@ -130,6 +128,7 @@
                 concatMap (moduleToAbbrs abbr) expansion
             ) (attrNames module);
         in
+        { mutators }:
         concatStringsSep "\n" (concatMap (moduleToAbbrs null) (attrValues mutators));
     };
 
