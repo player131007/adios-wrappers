@@ -97,7 +97,7 @@
         );
       mergeFunc =
         let
-          inherit (builtins) attrNames attrValues concatMap concatStringsSep isAttrs isString replaceStrings;
+          inherit (builtins) attrNames concatMap concatStringsSep isAttrs isString replaceStrings;
           escapeQuotes = replaceStrings [ "'" ] [ "\\'" ];
           abbrToString =
             {
@@ -139,7 +139,7 @@
             ) (attrNames module);
         in
         { mutators }:
-        concatStringsSep "\n" (concatMap (moduleToAbbrs null) (attrValues mutators));
+        concatStringsSep "\n" (concatMap (moduleToAbbrs null) mutators);
     };
 
     # TODO: add impure variant of this
@@ -152,15 +152,15 @@
       '';
       mutatorType = types.string;
       mergeFunc =
-        { mutators, options }:
         let
-          inherit (builtins) attrValues concatStringsSep;
+          inherit (builtins) concatStringsSep;
         in
+        { mutators, options }:
         concatStringsSep "\n" (
           [
             "status is-interactive || exit 0"
           ]
-          ++ attrValues mutators
+          ++ mutators
           ++ [ options.abbreviations ]
         );
     };
