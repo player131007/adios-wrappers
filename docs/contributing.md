@@ -18,6 +18,7 @@ Any new configuration options should be added with both variants, with checks th
 Here's an example module that adds both:
 
 ```nix
+{ types, ... }:
 {
   inputs = {
     nixpkgs.path = "/nixpkgs";
@@ -47,15 +48,33 @@ Here's an example module that adds both:
         Disjoint with the `settings` option.
       '';
     };
+
+    package = {
+      type = types.derivation;
+      description = "The foo package to be wrapped.";
+      defaultFunc = { inputs }: inputs.nixpkgs.pkgs.foo;
+    };
   };
   impl =
     { options, inputs }:
     let
-      generator = inputs.nixpkgs.pkgs.formats.toml {};
+      inherit (inputs.nixpkgs.pkgs) formats;
+      generator = formats.toml {};
     in
     assert !(options ? settings && options ? configFile);
     inputs.mkWrapper {
-      environment.FOO_CONFIG_PATH = options.configFile or (generator.generate "config" options.settings);
+      symlinks = {
+        "$out/foo/foo.toml" =
+          if options ? configFile then
+            options.configFile
+          else if options ? settings then
+            generator.generate "$out/foo/foo.toml" options.settings
+          else
+            null;
+      };
+      environment = {
+        FOO_CONFIG_FILE = "$out/foo/foo.toml";
+      };
     };
 }
 ```
