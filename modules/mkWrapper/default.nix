@@ -1,8 +1,7 @@
 { types, ... }:
 let
   nullOrString = types.nullOr types.string;
-in
-{
+in {
   inputs = {
     nixpkgs.from = { parent }: parent.nixpkgs;
   };

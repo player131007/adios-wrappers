@@ -5,7 +5,7 @@ nixfmt.overrideAttrs {
   src = fetchFromGitHub {
     owner = "llakala";
     repo = "nixfmt";
-    rev = "66d35eddc8ccbe833a8fbac9cd3a3e0015283d97";
-    hash = "sha256-1UE28LaQLKR2ZnHts7Sz2hIyZnaVz14s45A9LfNi60A=";
+    rev = "a9719fef6619eb931ec71bcff6d1c584a74e477e";
+    hash = "sha256-EakufsS1XKqHT0Hlo4bXd0PPxTjx+XmabFLHWt/pFbc=";
   };
 }
