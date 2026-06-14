@@ -1,6 +1,7 @@
 { nixfmt, fetchFromGitHub }:
 
 nixfmt.overrideAttrs {
+  dontVersionCheck = true;
   src = fetchFromGitHub {
     owner = "llakala";
     repo = "nixfmt";
