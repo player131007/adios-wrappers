@@ -533,6 +533,17 @@
     }
   },
 
+  "niri": {
+    "configFile": {
+      "description": "`config.kdl` file to be injected into the wrapped package. See the niri documentation for syntax and valid options: https://github.com/niri-wm/niri/wiki/Configuration:-Introduction",
+      "type": "pathLike"
+    },
+    "package": {
+      "description": "The niri package to be wrapped.",
+      "type": "derivation"
+    }
+  },
+
   "nixpkgs": {
     "lib": {
       "type": "attrs"
