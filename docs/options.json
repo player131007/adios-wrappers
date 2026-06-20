@@ -727,6 +727,25 @@
     }
   },
 
+  "wezterm": {
+    "configContents": {
+      "description": "Lua configuration to be injected into the wrapped package's `wezterm.lua`. See the documentation for valid options: https://wezterm.org/config/lua/general.html Disjoint with the `configFile` option.",
+      "type": "string"
+    },
+    "configFile": {
+      "description": "`wezterm.lua` file to be injected into the wrapped package. See the documentation for valid options: https://wezterm.org/config/lua/general.html Disjoint with the `configContents` option.",
+      "type": "pathLike"
+    },
+    "configModules": {
+      "description": "Files containing .lua configuration modules to be injected into the wrapped package. See the documentation to learn how to refer to modules in your wezterm.lua file: https://wezterm.org/config/files.html?h=modules#making-your-own-lua-modules",
+      "type": "listOf<pathLike>"
+    },
+    "package": {
+      "description": "The wezterm package to be wrapped.",
+      "type": "derivation"
+    }
+  },
+
   "yazi": {
     "extraPackages": {
       "description": "Packages to be automatically added as Yazi dependencies. This defaults to the optionalDeps of the Yazi package in nixpkgs, set here: https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/ya/yazi/package.nix#L8 The dependency `File` is added regardless of the content of this option, because it's non-optional. See the Yazi docs on this topic: https://yazi-rs.github.io/docs/installation",
