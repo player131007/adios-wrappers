@@ -113,6 +113,25 @@
     }
   },
 
+  "dunst": {
+    "configContents": {
+      "description": "Settings to be injected into the wrapped package's `dunstrc`. See the documentation for syntax and valid options: https://dunst-project.org/documentation/ Disjoint with the `configFile` option.",
+      "type": "string"
+    },
+    "configFile": {
+      "description": "`dunstrc` file to be injected into the wrapped package. See the documentation for syntax and valid options: https://dunst-project.org/documentation/ Disjoint with the `configContents` option.",
+      "type": "pathLike"
+    },
+    "dropinFiles": {
+      "description": "`*.conf` files to be injected into the wrapped package alongside the main configuration. See the documentation for syntax and valid options: https://dunst-project.org/documentation/dunst/#FILES",
+      "type": "listOf<pathLike>"
+    },
+    "package": {
+      "description": "The dunst package to be wrapped.",
+      "type": "derivation"
+    }
+  },
+
   "eza": {
     "flags": {
       "description": "Flags to be appended by default when running eza.",
