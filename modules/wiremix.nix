@@ -40,7 +40,6 @@
     { options, inputs }:
     let
       inherit (inputs.nixpkgs) pkgs;
-      inherit (inputs.nixpkgs.pkgs) writeText;
       generator = pkgs.formats.toml {};
     in
     assert !(options ? settings && options ? configFile);
