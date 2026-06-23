@@ -403,6 +403,21 @@
     }
   },
 
+  "hydrus": {
+    "clientFlags": {
+      "description": "List of hydrus-client flags to pass to hydrus client on startup. Note that paths passed to db_dir/temp_dir should be writable (not in the nix store) See the documentation for valid syntax and formatting of the related flags: https://hydrusnetwork.github.io/hydrus/launch_arguments.html",
+      "type": "listOf<string>"
+    },
+    "package": {
+      "description": "The hydrus package to be wrapped.",
+      "type": "derivation"
+    },
+    "serverFlags": {
+      "description": "List of hydrus-server flags to pass to hydrus server on startup. These flags only apply to hydrus-server, and are not required for basic client-only use, see: https://hydrusnetwork.github.io/hydrus/youDontWantTheServer.html Note that paths passed to db_dir/temp_dir should be writable (not in the nix store) See the documentation for valid syntax and formatting of the related flags: https://hydrusnetwork.github.io/hydrus/launch_arguments.html",
+      "type": "listOf<string>"
+    }
+  },
+
   "hyfetch": {
     "configFile": {
       "description": "`hyfetch.json` file to be injected into the wrapped package. Unwrapped hyfetch configurations can be created via: `hyfetch --config-file hyfetch.json --config` Disjoint with the `settings` option.",
