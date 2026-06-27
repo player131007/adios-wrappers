@@ -57,4 +57,8 @@
         else
           "";
     };
+
+  meta = {
+    maintainers = [ "mango" ];
+  };
 }

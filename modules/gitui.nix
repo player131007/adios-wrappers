@@ -225,4 +225,8 @@
         XDG_CONFIG_HOME = "$out";
       };
     };
+
+  meta = {
+    maintainers = [ "mango" ];
+  };
 }

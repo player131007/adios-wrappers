@@ -81,4 +81,8 @@
         LUA_PATH = "$out/wezterm-config/?.lua";
       };
     };
+
+  meta = {
+    maintainers = [ "mango" ];
+  };
 }
