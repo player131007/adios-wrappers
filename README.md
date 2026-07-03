@@ -2,7 +2,8 @@
 
 ## NOTE
 
-This is a new project, which only has a small set of modules at the moment. Users are expected to have some Adios knowledge coming in.
+This project uses the [Adios](https://github.com/llakala/lladios) module system, which is a faster and lazier
+alternative to `lib.evalModules`. Users are expected to have some Adios knowledge coming in.
 
 # Installation
 
