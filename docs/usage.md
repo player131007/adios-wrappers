@@ -187,12 +187,14 @@ let
   };
 ```
 
-Then, each of the injections can be moved into its own file under `./wrappers`:
+Then, each of the injections can be moved into its own file under `./wrappers`. Here's a demo of what the contents might
+look like:
 
 ```nix
 # wrappers/less.nix
 _:
 {
+  # adding a value for the flags option, which previously had no default
   options.flags.default = [ "--quit-if-one-screen" ];
 }
 ```
@@ -201,24 +203,19 @@ _:
 # wrappers/git.nix
 _:
 {
+  # adding our less module as an input, so it can be used in settings
   inputs.less.from = { parent }: parent.less;
 
+  # using a defaultFunc instead of a default, so we can read from inputs
   options.settings.defaultFunc =
     { options, inputs }:
     {
-      core.pager = inputs.nixpkgs.lib.getExe (options { });
+      user = {
+        name = "Your Name";
+        email = "your.email@host.provider";
+      };
+      # calling the less module with {} to get its final derivation
+      core.pager = inputs.nixpkgs.lib.getExe (inputs.less {});
     };
-
-  mutations."/fish".abbreviations = _: {
-    gs = "git status";
-  };
-}
-```
-
-```nix
-# wrappers/fish.nix
-_:
-{
-  options.abbreviations.mutators = [ "/git" ];
 }
 ```
