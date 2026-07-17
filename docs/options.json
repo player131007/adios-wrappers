@@ -257,11 +257,11 @@
     },
     "dmenuFlags": {
       "description": "Dmenu related flags to pass to fuzzel when using `settings`/`configFile` See the documentation for valid syntax and formatting of the related flags: https://codeberg.org/dnkl/fuzzel/src/branch/master/doc/fuzzel.1.scd Requires that either `settings`/`configFile` be set.",
-      "type": "dmenuFlags"
+      "type": "struct<dmenuFlags>"
     },
     "logFlags": {
       "description": "Logging related flags to pass to fuzzel when using `settings`/`configFile` See the documentation for valid syntax and formatting of the related flags: https://codeberg.org/dnkl/fuzzel/src/branch/master/doc/fuzzel.1.scd Requires that either `settings`/`configFile` be set.",
-      "type": "logFlags"
+      "type": "struct<logFlags>"
     },
     "package": {
       "description": "The fuzzel package to be wrapped.",
@@ -329,7 +329,7 @@
           "char": "Char('h')"
         }
       },
-      "type": "attrsOf<keybind>"
+      "type": "attrsOf<struct<keybind>>"
     },
     "keybindsFile": {
       "description": "`key_bindings.ron` file to be injected into the wrapped package. See the documentation for syntax and valid options: https://github.com/gitui-org/gitui/blob/master/KEY_CONFIG.md#key-config Disjoint with the `keybinds` option.",
@@ -479,7 +479,7 @@
         "port": "6697",
         "server": "irc.libera.chat"
       },
-      "type": "autoconnect"
+      "type": "struct<autoconnect>"
     },
     "config": {
       "description": "The config to be injected into the wrapped package. See the documentation for valid options: https://irssi.org/documentation/settings/ Disjoint with the `configDir` option.",
@@ -596,7 +596,7 @@
     "environment": {
       "default": {},
       "description": "Environment variables to be set during the execution of the wrapped program.",
-      "type": "attrsOf<union<null,pathLike,readFromFileAtRuntime>>"
+      "type": "attrsOf<union<null,pathLike,struct<readFromFileAtRuntime>>>"
     },
     "extraPaths": {
       "default": [],
@@ -1028,8 +1028,8 @@
         },
         "ls": "ls --color"
       },
-      "mutatorType": "attrsOf<union<string,global alias>>",
-      "type": "attrsOf<union<string,global alias>>"
+      "mutatorType": "attrsOf<union<string,struct<global alias>>>",
+      "type": "attrsOf<union<string,struct<global alias>>>"
     },
     "extraPackages": {
       "description": "Runtime dependencies to be injected into the wrapped package's path.",
@@ -1053,8 +1053,8 @@
     "plugins": {
       "description": "Plugins to be appended to the wrapped package's `.zshrc`. If a value is a derivation, it will be sourced as `<derivation>/share/<derivation.pname>/<derivation.pname>.zsh` which should be compatible with the majority of plugins. If this path is incorrect then the value may be defined as an attrSet containing the attrs `package` and `path` and will be sourced as `<package>/<path>`.",
       "example": "[   pkgs.zsh-autosuggestions   {     package = pkgs.nix-zsh-completions;     path = \"share/zsh/plugins/nix/nix-zsh-completions.plugin.zsh\";   } ];",
-      "mutatorType": "listOf<union<derivation,plugin>>",
-      "type": "listOf<union<derivation,plugin>>"
+      "mutatorType": "listOf<union<derivation,struct<plugin>>>",
+      "type": "listOf<union<derivation,struct<plugin>>>"
     },
     "settings": {
       "description": "Options to be enabled or disabled in the wrapped package's `.zshrc` file. See the documentation for valid options: https://zsh.sourceforge.io/Doc/Release/Options.html",
