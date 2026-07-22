@@ -16,7 +16,6 @@
 
         Disjoint with the `configFile` option.
       '';
-      mutatorType = types.attrs;
       mergeFunc = adios.lib.merge.attrs.recursively;
     };
     configFile = {

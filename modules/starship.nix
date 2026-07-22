@@ -38,7 +38,6 @@
         Setting or mutating it yourself isn't recommended.
       '';
       mutators = []; # Hack to make the mergeFunc be called with no mutators
-      mutatorType = types.attrs;
       mergeFunc =
         { mutators, options, inputs }:
         let

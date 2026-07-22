@@ -20,7 +20,6 @@
         default-bg = "#000000";
         default-fg = "#FFFFFF";
       };
-      mutatorType = types.attrs;
       mergeFunc = adios.lib.merge.attrs.recursively;
     };
     keybinds = {
@@ -41,7 +40,6 @@
         "<Right>" = "navigate next";
         "[fullscreen] <C-i>" = "zoom in";
       };
-      mutatorType = types.attrs;
       mergeFunc = adios.lib.merge.attrs.recursively;
     };
     sourceFiles = {
@@ -55,7 +53,6 @@
 
         Disjoint with `settings` and `keybinds` options.
       '';
-      mutatorType = types.listOf types.pathLike;
       mergeFunc = adios.lib.merge.lists.concat;
     };
 

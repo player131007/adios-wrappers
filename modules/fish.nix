@@ -24,7 +24,6 @@
 
         Disjoint with the `completions` option.
       '';
-      mutatorType = types.listOf types.pathLike;
       mergeFunc = adios.lib.merge.lists.concat;
     };
 
@@ -45,17 +44,33 @@
 
         Disjoint with the `functions` option.
       '';
-      mutatorType = types.listOf types.pathLike;
       mergeFunc = adios.lib.merge.lists.concat;
     };
 
     abbreviations = {
-      type = types.string;
+      type =
+        let
+          # Just renamed for a nicer internal name
+          abbrType = types.rename "abbr" (
+            types.union [
+              types.string
+              (types.struct "abbrWithCursor" {
+                setCursor = types.bool;
+                expansion = types.string;
+              })
+            ]
+          );
+        in
+        types.attrsOf (
+          types.union [
+            abbrType
+            (types.listOf (types.attrsOf abbrType))
+          ]
+        );
       description = ''
         Custom abbreviations to be injected into the wrapped package.
 
-        When mutating this option, a special API is provided.
-        In this API, each attribute maps an abbreviation to its expansion.
+        Each attribute should map an abbreviation to its expansion.
         The values can either be:
         - a normal string with no extra logic
         - a special struct, allowing abbrs to set the location of the cursor on expansion
@@ -75,74 +90,11 @@
           }
         ];
       };
-      mutatorType =
-        let
-          abbrWithCursor = types.struct "abbrWithCursor" {
-            setCursor = types.bool;
-            expansion = types.string;
-          };
-          # Just renamed for a nicer internal name
-          abbrType = types.rename "abbr" (
-            types.union [
-              types.string
-              (abbrWithCursor.override { unknown = false; })
-            ]
-          );
-        in
-        types.attrsOf (
-          types.union [
-            abbrType
-            (types.listOf (types.attrsOf abbrType))
-          ]
-        );
-      mergeFunc =
-        let
-          inherit (builtins) attrNames concatMap concatStringsSep isAttrs isString replaceStrings;
-          escapeQuotes = replaceStrings [ "'" ] [ "\\'" ];
-          abbrToString =
-            {
-              setCursor ? false,
-              command,
-              abbr,
-              expansion
-            }:
-            "abbr --add "
-            + (if setCursor then "--set-cursor " else "")
-            + (if command != null then "--command ${command} " else "")
-            + "-- ${abbr} '${escapeQuotes expansion}'";
-          moduleToAbbrs =
-            command: module:
-            concatMap (
-              abbr:
-              let
-                expansion = module.${abbr};
-              in
-              if isString expansion then
-                [
-                  (abbrToString {
-                    inherit command abbr expansion;
-                  })
-                ]
-              else if isAttrs expansion then
-                [
-                  (abbrToString {
-                    inherit command abbr;
-                    inherit (expansion) setCursor expansion;
-                  })
-                ]
-              else
-                # Note that fish doesn't work with "nested" commands. You would
-                # think `--command 'foo bar' -- b baz` would work. but it
-                # doesn't. While technically the code could recurse twice here,
-                # the type prevents it
-                concatMap (moduleToAbbrs abbr) expansion
-            ) (attrNames module);
-        in
-        { mutators }:
-        concatStringsSep "\n" (concatMap (moduleToAbbrs null) mutators);
+      mergeFunc = adios.lib.merge.attrs.flat;
     };
 
-    # TODO: add impure variant of this
+    # TODO: add impure variant of this, and make abbreviations work without
+    # merging this
     interactiveShellInit = {
       type = types.string;
       description = ''
@@ -150,10 +102,52 @@
 
         Only ran when Fish is initialized interactively.
       '';
-      mutatorType = types.string;
       mergeFunc =
         let
-          inherit (builtins) concatStringsSep;
+          inherit (builtins) attrNames concatMap concatStringsSep isAttrs isString replaceStrings;
+          abbrsToString =
+            let
+              escapeQuotes = replaceStrings [ "'" ] [ "\\'" ];
+              abbrToString =
+                {
+                  setCursor ? false,
+                  command,
+                  abbr,
+                  expansion
+                }:
+                "abbr --add "
+                + (if setCursor then "--set-cursor " else "")
+                + (if command != null then "--command ${command} " else "")
+                + "-- ${abbr} '${escapeQuotes expansion}'";
+              flattenAbbrs =
+                command: abbrs:
+                concatMap (
+                  abbr:
+                  let
+                    expansion = abbrs.${abbr};
+                  in
+                  if isString expansion then
+                    [
+                      (abbrToString {
+                        inherit command abbr expansion;
+                      })
+                    ]
+                  else if isAttrs expansion then
+                    [
+                      (abbrToString {
+                        inherit command abbr;
+                        inherit (expansion) setCursor expansion;
+                      })
+                    ]
+                  else
+                    # Note that fish doesn't work with "nested" commands. You would
+                    # think `--command 'foo bar' -- b baz` would work. but it
+                    # doesn't. While technically the code could recurse twice here,
+                    # the type prevents it
+                    concatMap (flattenAbbrs abbr) expansion
+                ) (attrNames abbrs);
+            in
+            abbrs: concatStringsSep "\n" (flattenAbbrs null abbrs);
         in
         { mutators, options }:
         concatStringsSep "\n" (
@@ -161,7 +155,12 @@
             "status is-interactive || exit 0"
           ]
           ++ mutators
-          ++ [ options.abbreviations ]
+          ++ (
+            if options ? abbreviations then
+              [ (abbrsToString options.abbreviations) ]
+            else
+              []
+          )
         );
     };
 

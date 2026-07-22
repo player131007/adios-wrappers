@@ -14,7 +14,6 @@
         See the nushell documentation for valid options:
         https://www.nushell.sh/book/configuration.html
       '';
-      mutatorType = types.string;
       mergeFunc = adios.lib.merge.strings.concatLines;
     };
     sourceFiles = {
@@ -23,7 +22,6 @@
         A list of paths to source in the `config.nu` file.
         This can be used to import extra files, and can be used with impurity
       '';
-      mutatorType = types.listOf types.pathLike;
       mergeFunc = adios.lib.merge.lists.concat;
     };
 
@@ -32,7 +30,6 @@
       description = ''
         Runtime dependencies to be injected into the wrapped package's path.
       '';
-      mutatorType = types.listOf types.derivation;
       mergeFunc = adios.lib.merge.lists.concat;
     };
 
