@@ -94,6 +94,10 @@
       "description": "`direnvrc` file to be copied into the wrapped package. The syntax is described at: https://direnv.net/#the-stdlib",
       "type": "string"
     },
+    "nix-direnv": {
+      "description": "The nix-direnv package to integrate with the wrapped package, or null for no integration.",
+      "type": "nullOr<derivation>"
+    },
     "package": {
       "description": "The direnv package to be wrapped.",
       "type": "derivation"

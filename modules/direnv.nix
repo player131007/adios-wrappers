@@ -48,6 +48,14 @@
       '';
     };
 
+    nix-direnv = {
+      type = types.nullOr types.derivation;
+      defaultFunc = { inputs }: inputs.nixpkgs.pkgs.nix-direnv;
+      description = ''
+        The nix-direnv package to integrate with the wrapped package, or null for no integration.
+      '';
+    };
+
     package = {
       type = types.derivation;
       defaultFunc = { inputs }: inputs.nixpkgs.pkgs.direnv;
@@ -106,7 +114,8 @@
   impl =
     { options, inputs }:
     let
-      inherit (inputs.nixpkgs.pkgs) formats writeText nix-direnv;
+      inherit (inputs.nixpkgs.pkgs) formats writeText;
+      inherit (options) nix-direnv;
       generator = formats.toml {};
     in
     assert !(options ? settings && options ? configFile);
@@ -122,7 +131,8 @@
           else
             null;
         # nix-direnv integration
-        "$out/direnv/lib/hm-nix-direnv.sh" = "${nix-direnv}/share/nix-direnv/direnvrc";
+        "$out/direnv/lib/hm-nix-direnv.sh" =
+          if nix-direnv != null then "${nix-direnv}/share/nix-direnv/direnvrc" else null;
         "$out/direnv/direnvrc" =
           if options ? direnvrcFile then
             options.direnvrcFile
